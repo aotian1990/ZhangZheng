@@ -1,0 +1,118 @@
+﻿@model List<Goceen.Website.Domain.SysCarousel>
+@{
+    Layout = null;
+ }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+
+    <link rel="stylesheet" href="@Url.Content("/Content/pc/css/style.css")">
+    <link rel="stylesheet" href="@Url.Content("/Content/pc/css/responsiveslides.css")">
+
+    <script src="@Url.Content("/Content/pc/js/jquery-1.10.2.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("/Content/pc/js/responsiveslides.min.js")"></script>
+    <script type="text/javascript">
+    $(function () {
+	// Slideshow
+	$("#slider").responsiveSlides({
+		auto: true,
+		pager: true,
+		nav: true,
+		speed: 500,
+		timeout:4000,
+		pauseControls: true,
+		namespace: "callbacks"
+	    });
+    });
+    </script>
+
+</head>
+<body>
+    @Html.Action("Header", "Partial")
+    <div class="callbacks_container">
+        <ul class="rslides" id="slider">
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <li><a href="#"><img src="@item.Img" alt=""></a></li>
+                }
+
+            }
+        </ul>
+    </div>
+
+    <div id="container">
+        <div class="section section1 clearfix">
+            <div class="wrap">
+                <div class="title">
+                    <h3>热门景点</h3>
+                    <span>HOT SPOTS</span>
+                </div>
+                @Html.Action("HotArticle",new { catId = 2})
+                <a href="#" class="more">MORE</a>
+
+            </div>
+        </div>
+
+        <div class="section section2 clearfix">
+            <div class="wrap">
+                <div class="title">
+                    <h3>美食天地</h3>
+                    <span>food court</span>
+                </div>
+                @Html.Action("HotArticle", new { catId = 3 })
+                <a href="#" class="more">MORE</a>
+
+            </div>
+        </div>
+
+        <div class="section section3 clearfix">
+            <div class="wrap">
+                <div class="title">
+                    <h3>田园体验</h3>
+                    <span>Rural experience</span>
+                </div>
+                @Html.Action("HotArticle", new { catId = 4 })
+
+                <a href="#" class="more">MORE</a>
+
+            </div>
+        </div>
+
+        <div class="section section4 clearfix">
+            <div class="wrap">
+                <div class="title">
+                    <h3>时尚休闲</h3>
+                    <span>The fashion leisure</span>
+                </div>
+                @Html.Action("HotArticle", new { catId = 5 })
+
+                <a href="#" class="more">MORE</a>
+
+            </div>
+        </div>
+        <div class="section5 clearfix">
+            <div class="wrap">
+                <h2>掌政————您的私属旅行专家</h2>
+                <p>
+                    尊敬的各位领导：欢迎来到美丽的银川之镇掌镇，参观游览2013中国锦州世界园林博览会，很荣幸今天能为您做讲解服务，希望今天的宁夏之旅能给您留下美好的印象。<br />
+                    最后祝愿您能今后的日子里工作顺利身体健康 生活愉快。
+                </p>
+                <div class="link">
+                    <a href="#" class="lookMore">查看更多主题</a>
+                    <a href="#">立即定制&gt;&gt;</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    @Html.Action("Footer","Partial")
+
+
+</body>
+</html>

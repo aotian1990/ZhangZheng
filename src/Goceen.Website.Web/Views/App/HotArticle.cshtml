@@ -1,0 +1,31 @@
+﻿@model List<Goceen.Website.Domain.SysArticle>
+@{
+    Layout = null;
+}
+<div class="section_list clearfix">
+    @if (Model != null && Model.Count >= 3)
+    {
+        <div class="box1 aui-pull-left">
+            <a href="">
+                <div class="img_box" style="background-image: url(@Model[0].RecommendImg);"></div>
+                <div class="text">@Model[0].Title</div>
+            </a>
+        </div>
+            <div class="box2 aui-pull-right">
+                <div class="box2_1">
+                    <a href="#">
+                        <div class="img_box" style="background-image: url(@Model[1].RecommendImg);"></div>
+                        <div class="text">@Model[1].Title</div>
+                    </a>
+                </div>
+                <div class="box2_2">
+                    <a href="#">
+                        <div class="img_box" style="background-image: url(@Model[2].RecommendImg);"></div>
+                        <div class="text">@Model[2].Title</div>
+                    </a>
+                </div>
+            </div>
+
+    }
+
+</div>

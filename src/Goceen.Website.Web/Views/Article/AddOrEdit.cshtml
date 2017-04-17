@@ -1,0 +1,208 @@
+﻿@model Goceen.Website.Domain.SysArticle
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+    var defaultchannel = string.Empty;
+    defaultchannel = Model.Category != null ? Model.Category.Channel.Id.ToString() : "请选择";
+}
+
+<div id="DivAddType" style="width:96%;margin:10px auto;">
+    @using (Html.BeginForm("Save", "Category", FormMethod.Post, new { @id = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <table id="tblAddBatch" class="view" style="width:98%">
+            <tr>
+                <th>
+                    <label for="name">标题：</label>
+                </th>
+                <td>
+                    @Html.HiddenFor(m => m.Id)
+                    @Html.EasyuiInput(m => m.Title, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+                <th>
+                    <label for="channel">属性：</label>
+                </th>
+                <td>
+                    @Html.LabelFor(m=>m.IsEnabled,"显示") @Html.CheckBoxFor(m => m.IsEnabled, new { @checked = "checked" }) 
+                    @Html.LabelFor(m => m.IsFirst, "置顶") @Html.CheckBoxFor(m => m.IsFirst, new { @checked = "checked" })                    
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label>所属分类：</label>
+                </th>
+                <td>
+                    @Html.DropDownList("channelId", (List<SelectListItem>)ViewBag.ChannelList,  new { @class = "easyui-validatebox easyui-combobox", style = "width:166px" })
+                    <input class="easyui-combobox" id="categoryId" name="categoryId" style="width:166px"> 
+                </td>
+                <th>
+                    <label for="orderno">浏览次数：</label>
+                </th>
+                <td>
+                    @*<input class="easyui-validatebox" data-options="required:true,validType:['number','range[0,999,\'排列序号必须是0-999之间\']']" id="OrderNo" name="OrderNo" />*@
+                    @Html.DisplayFor(m => m.ViewCount)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label>关键字：</label>
+                </th>
+                <td colspan="3">
+                    @Html.EasyuiInput(m => m.Keyword, new { @class = "easyui-validatebox", style = "width:500px" })
+                </td>    
+            </tr>
+            <tr>
+                <th>
+                    <label>描述：</label>
+                </th>
+                <td colspan="3">
+                    @Html.EasyuiInput(m => m.Description, new { @class = "easyui-validatebox", style = "height:80px;width: 500px;resize: none;" }, "textarea")
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <label>推荐图：</label>
+                </th>
+                <td colspan="3">
+                    <input type="file" id="uploadfile" />
+                    @Html.HiddenFor(m=>m.RecommendImg)
+                    <div id="fileQueue"></div>
+                    <div><img src="@Model.RecommendImg" width="150" /></div>
+                </td>
+            </tr>           
+            <tr>
+                <th>
+                    <label for="Description">内容：</label>
+                </th>
+                <td colspan="3">
+                    @Html.TextAreaFor(m => m.Content, new { style = "height:300px;width: 90%", id = "content" })
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align:center; padding-top:10px">
+                    <a href="javascript:void(0)" class="easyui-linkbutton" id="btnAddOKType" iconcls="icon-ok">确定</a>
+                    <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-cancel" onclick="location.href = document.referrer;">返回</a>
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+@section Scripts {
+    <script type="text/javascript" charset="utf-8">window.UMEDITOR_HOME_URL = "@Url.Content("~/Scripts/umeditor/")";</script>
+    <script src="@Url.Content("~/Scripts/umeditor/umeditor.config.js")" type="text/javascript" charset="utf-8"></script>
+    <script src="@Url.Content("~/Scripts/umeditor/umeditor.min.js")" type="text/javascript" charset="utf-8"></script>
+    <link href="@Url.Content("~/Scripts/umeditor/themes/default/css/umeditor.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/umeditor/lang/zh-cn/zh-cn.js")" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="/Scripts/uploadify/jquery.uploadify.min.js"></script>
+    <link type="text/css" rel="Stylesheet" href="@Url.Content("~/Scripts/uploadify/uploadify.css")" />
+    <script type="text/javascript">
+    $(function () {
+        var editor = UM.getEditor('content', {
+            imageUrl: "@Url.Action("UmeditorUploadImg", "Upload")",
+            imagePath: ""
+        });
+        var auth = "@(Request.Cookies[FormsAuthentication.FormsCookieName]==null?string.Empty:Request.Cookies[FormsAuthentication.FormsCookieName].Value)";
+        var ASPSESSID = "@(Session.SessionID )";
+        $('#uploadfile').uploadify({
+            swf: '/Scripts/uploadify/uploadify.swf?m=' + Math.random(),
+            uploader: '/upload/UploadImg',
+            cancelImg: '/Scripts/uploadify/uploadify-cancel.png',
+            fileObjName: 'Filedata',
+            buttonTex: '选择文件',
+            formData: { 'type': 'pic' },
+            auto: true,
+            fileTypeExts: "*.jpg;*.png;*.bmp;*.gif;*.pic;*.jpeg",             // 扩展名
+            fileTypeDesc: "请选择 jpg png bmp gif pic文件",     // 文件说明
+            queueID: 'fileQueue',
+            multi: false,
+            removeCompleted: false,
+            onUploadSuccess: function (file, data, response) {
+                var picpath = eval(data);
+                $('#RecommendImg').val(picpath);
+            },
+            onUploadError: function (file, errorCode, errorMsg, errorString) {
+                $.messager.alert("提示", errorMsg);
+            }
+        });
+
+        $("#channelId").combobox({
+            onSelect: function (record) {
+                SetCategoryCombobox(record.value)
+            }
+        });
+        var _cateid = $('#categoryId').combobox({
+            disabled: true
+        });
+        @if (Model.Category != null)
+        {
+            var cid = Model.Category.Channel.Id;
+            @Html.Raw("$(\"#channelId\").combobox('setValue'," + cid + ");\r\n");
+            @Html.Raw("SetCategoryCombobox(" + cid + "," + Model.Category.Id + ");\r\n");
+            @Html.Raw("$('#categoryId').combobox('select'," + Model.Category.Id + ");");
+        }
+        else
+        {
+            @Html.Raw("$(\"#channelId\").combobox('setValue','请选择')");
+        }
+
+    });
+    
+        function SetCategoryCombobox(value,defaultvalue) {
+            if (value != "") {
+                $.ajax({
+                    url: '@Url.Action("GetCategoryList", "Article")?channelId=' + value,
+                    type: "Post",
+                    success: function (data) {
+                        var data = eval('(' + data + ')');
+                        if (data.Success) {
+                            $('#categoryId').combobox({
+                                disabled: false,
+                                valueField: 'Value',
+                                textField: 'Text'
+                            }).combobox('loadData', data.Data);
+                            if (defaultvalue !="") {
+                                $('#categoryId').combobox('setValue', defaultvalue);
+                            }
+                            else {
+                                $('#categoryId').combobox('setValue', '请选择');
+                            }
+                        }
+                        else {
+                            $.messager.alert("提示", data.Message);
+                        }
+                    }
+                });
+
+            }
+        }
+
+    $("#btnAddOKType").click(function () {
+        var form = $("#form");
+        if (form.form("validate")) {
+            $.ajax({
+                debug: true,
+                url: "/Article/Save",
+                type: "Post",
+                data: form.serialize(),
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        $.messager.alert('提示', data.Message, "info", function () {
+                            window.location.href = "/Article/Admin/";
+                        });
+                    }
+                    else {
+                        $.messager.alert("提示", data.Message);
+                    }
+                }
+            });
+        }
+        return false;
+    });
+
+    </script>
+}
+
+
+
+

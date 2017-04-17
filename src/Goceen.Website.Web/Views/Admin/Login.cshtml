@@ -1,0 +1,28 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>系统登录</title>
+    <link type="text/css" rel="Stylesheet" href="@Url.Content("~/Content/newLogin.css")" />
+    @Scripts.Render("~/bundles/jquery")
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Login.js")"></script>
+</head>
+<body id="userlogin_body">
+
+    <div class="login">
+        <input class="txtusernamecssclass" id="txtAccount" maxlength="20" name="account" />
+        <input class="txtpasswordcssclass" id="txtPassword" type="password" name="password" />
+
+        <input id="txtCode" name="code" maxlength="4" />
+        <img class="valicode" src="/Admin/ValidateCode/" style="cursor: pointer;" alt="点击刷新" onclick="this.src=this.src+'?';" />
+        <input type="button" class="ibtnentercssclass" id="ibtnenter" name="ibtnenter" onclick="logOn();return;" />
+
+        <div style="text-align:center;color:Red;line-height:30px;height:30px;" id="msg">请输入用户名和密码</div>
+    </div>
+</body>
+</html>

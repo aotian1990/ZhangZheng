@@ -1,0 +1,92 @@
+﻿@model Goceen.Website.Domain.SysArticle
+@{ 
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>@Model.Title</title>
+    <link rel="stylesheet" href="@Url.Content("/Content/pc/css/style.css")">
+
+    <script src="@Url.Content("/Content/pc/js/jquery-1.10.2.min.js")"></script>
+
+</head>
+<body>
+
+    @Html.Action("Header", "Partial")
+    <img src="@Url.Content("/Content/pc/images/banner1.jpg")" width="100%" />
+
+    <div class="list_pic">
+        <div class="wrap clearfix">
+            <div class="sub_left fl">
+
+                <div class="page">
+                    <h2>@Model.Title</h2>
+                    <p class="label">
+                        发布时间：@Model.UpdateDate.ToString()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                     
+                        浏览次数：@Model.ViewCount 次
+                    </p>
+                    <div id="page_content" class="page_content">
+                    </div>
+                </div> 
+
+            </div>
+
+
+            <div class="sub_right fr">
+                @Html.Action("HotSpots")
+                @Html.Action("HotInfo")
+
+            </div>
+
+        </div>
+    </div>
+
+
+    @Html.Action("Footer", "Partial")
+
+</body>
+</html>
+<script>
+    $(function () {
+        var html = decodeHtml("@Model.Content")
+        $("#page_content").html(html);//将html内容添加在
+    })
+    //将html代码格式化成可以直接编译的代码
+    function decodeHtml(s) {
+        var HTML_DECODE = {
+            "&lt;": "<",
+            "&gt;": ">",
+            "&amp;": "&",
+            "&nbsp;": " ",
+            "&quot;": "\"",
+            "&copy;": ""
+
+            // Add more
+        };
+
+        var REGX_HTML_ENCODE = /"|&|'|<|>|[\x00-\x20]|[\x7F-\xFF]|[\u0100-\u2700]/g;
+
+        var REGX_HTML_DECODE = /&\w+;|&#(\d+);/g;
+
+        var REGX_TRIM = /(^\s*)|(\s*$)/g;
+
+        s = (s != undefined) ? s : "";
+        return (typeof s != "string") ? s :
+            s.replace(REGX_HTML_DECODE,
+                      function ($0, $1) {
+                          var c = HTML_DECODE[$0];
+                          if (c == undefined) {
+                              // Maybe is Entity Number
+                              if (!isNaN($1)) {
+                                  c = String.fromCharCode(($1 == 160) ? 32 : $1);
+                              } else {
+                                  c = $0;
+                              }
+                          }
+                          return c;
+                      });
+    };
+</script>

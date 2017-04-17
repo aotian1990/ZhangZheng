@@ -1,0 +1,15 @@
+﻿
+@{
+    
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+
+<div region="center" style="padding: 5px;" border="false">
+    <table id="grid"></table>
+</div>
+<div id="modalwindow" data-options="modal:true,closed:true,minimizable:false,shadow:false"></div>
+@section Scripts {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/ViewScripts/category.js")"></script>
+}
+
+

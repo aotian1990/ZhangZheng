@@ -1,0 +1,20 @@
+﻿@model List<Goceen.Website.Domain.SysArticle>
+@{
+    Layout = null;
+}
+<div class="sub_news">
+    <div class="subR_title clearfix">
+        <a href="#" class="fr">MORE</a>
+        <h2>动态资讯</h2>
+    </div>
+    <ul>
+        @if (Model != null && Model.Count >= 10)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                <li><a href="/Home/News/@Model[i].Id"><strong> · </strong> @Model[i].Title</a></li>
+            }
+        }
+
+    </ul>
+</div>

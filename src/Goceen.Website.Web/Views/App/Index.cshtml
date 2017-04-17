@@ -1,0 +1,135 @@
+﻿@model List<Goceen.Website.Domain.SysCarousel>
+@{ Layout = null;}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+
+    <title>首页</title>
+    <link href="~/Content/app/css/aui.2.0.css" rel="stylesheet" />
+    <link href="~/Content/app/css/aui-slide.css" rel="stylesheet" />
+    <link href="~/Content/app/css/style.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    @Html.Action("AppHeader", "Partial")
+
+    <!-- banner -->
+   @Html.Action("Slid")
+
+    <section class="aui-grid">
+
+        <!-- 搜索 -->
+        <!--
+         <div class="search clearfix">
+            <form action="" method="">
+                <input type="text" placeholder="请输入关键词" class="search_text aui-pull-left" />
+                <input type="submit" class="search_btn aui-pull-right" value="" />
+            </form>
+        </div>
+        -->
+
+        <div class="aui-row">
+            <div class="aui-col-xs-3">
+                <i class="aui-iconfont intro"><img src="~/Content/app/images/nav1.png" /></i>
+                <div class="aui-grid-label">走进掌政</div>
+            </div>
+            <div class="aui-col-xs-3">
+                <i class="aui-iconfont jq"><img src="~/Content/app/images/nav2.png" /></i>
+                <div class="aui-grid-label">热门景点</div>
+            </div>
+            <div class="aui-col-xs-3">
+                <i class="aui-iconfont booking"><img src="~/Content/app/images/nav3.png" /></i>
+                <div class="aui-grid-label">美食天地</div>
+            </div>
+            <div class="aui-col-xs-3">
+                <i class="aui-iconfont action"><img src="~/Content/app/images/nav4.png" /></i>
+                <div class="aui-grid-label">动态资讯</div>
+            </div>
+            <div class="aui-col-xs-3">
+                <i class="aui-iconfont hotel"><img src="~/Content/app/images/nav5.png" /></i>
+                <div class="aui-grid-label">地图导航</div>
+            </div>
+            <div class="aui-col-xs-3">
+                <i class="aui-iconfont video"><img src="~/Content/app/images/nav6.png" /></i>
+                <div class="aui-grid-label">田园体验</div>
+            </div>
+            <div class="aui-col-xs-3">
+                <i class="aui-iconfont traffic"><img src="~/Content/app/images/nav7.png" /></i>
+                <div class="aui-grid-label">时尚休闲</div>
+            </div>
+            <div class="aui-col-xs-3">
+                <i class="aui-iconfont"><img src="~/Content/app/images/nav8.png" /></i>
+                <div class="aui-grid-label">农家小店</div>
+            </div>
+        </div>
+
+        <div class="section1">
+            <div class="title clearfix">
+                <div class="box aui-pull-left"></div>
+                <a href="#" class="aui-pull-left"><span>热门景点</span>HOT SPOTS</a>
+            </div>
+           @Html.Action("HotArticle", new { catId = 2 })
+        </div>
+
+
+        <div class="section1">
+            <div class="title clearfix">
+                <div class="box aui-pull-left"></div>
+                <a href="#" class="aui-pull-left"><span>美食天地</span>food court</a>
+            </div>
+            @Html.Action("HotArticle", new { catId = 3 })
+        </div>
+
+        <div class="section1">
+            <div class="title clearfix">
+                <div class="box aui-pull-left"></div>
+                <a href="#" class="aui-pull-left"><span>田园体验</span>Rural experience</a>
+            </div>
+            @Html.Action("HotArticle", new { catId = 4 })
+        </div>
+
+        <div class="section1">
+            <div class="title clearfix">
+                <div class="box aui-pull-left"></div>
+                <a href="#" class="aui-pull-left"><span>时尚休闲</span>The fashion leisure</a>
+            </div>
+            @Html.Action("HotArticle", new { catId = 5 })
+        </div>
+
+
+    </section>
+
+
+
+    <footer id="footer">掌政——您的私属旅行专家</footer>
+
+</body>
+<script src="~/Content/app/js/aui-slide.js"></script>
+<script type="text/javascript">
+    var slide3 = new auiSlide({
+        container:document.getElementById("aui-slide"),
+        // "width":300,
+        "height":150,
+        "speed":500,
+        "autoPlay": 3000, //自动播放
+        "loop":true,
+        "pageShow":true,
+        "pageStyle":'line',
+        'dotPosition':'center'
+    })
+    console.log(slide3.pageCount());
+</script>
+
+<script src="~/Content/app/js/api.js"></script>
+<script src="~/Content/app/js/aui-popup.js"></script>
+<script type="text/javascript">
+    var popup = new auiPopup();
+    function showPopup(){
+        popup.show(document.getElementById("top-left"))
+    }
+</script>
+</html>

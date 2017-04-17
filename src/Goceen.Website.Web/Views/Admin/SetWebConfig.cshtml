@@ -1,0 +1,177 @@
+﻿@model Goceen.Website.Domain.SysConfig
+
+@{
+    ViewBag.Title = "SetWebConfig";
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+
+<div id="DivAddType" style="width:96%;margin:10px auto;">
+    @using (Html.BeginForm("SaveConfig", "Admin", FormMethod.Post, new { @id = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <table id="tblAddBatch" class="view" style="width:98%">
+            <tr>
+                <th colspan="2">
+                    <h2>网站设置</h2>
+                </th> 
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WebName)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.WebName, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WebUrl)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.WebUrl, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WebLogo)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.WebLogo, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.CompanyName)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.CompanyName, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.Address)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.Address, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.Tel)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.Tel, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.IcpCode)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.IcpCode, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WebTitle)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.WebTitle, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WebKeyword)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.WebKeyword, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WebDescription)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.WebDescription, new { @class = "easyui-validatebox", style = "width:400px; height: 80px; resize:none;" },"textarea")
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WebCopyright)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.WebCopyright, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WebStatus)
+                </th>
+                <td>
+                    @Html.RadioButtonFor(m => m.WebStatus, true) 开放 
+                    @Html.RadioButtonFor(m => m.WebStatus, false) 关闭
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WebCloseReason)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.WebCloseReason, new { @class = "easyui-validatebox", style = "width:400px; height: 80px;resize:none;" }, "textarea")
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WebCountCode)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.WebCountCode, new { @class = "easyui-validatebox", style = "width:400px; height: 80px;resize:none;" }, "textarea")
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.LabelFor(model => model.WorkingThemeName)
+                </th>
+                <td>
+                    @Html.EasyuiInput(m => m.WorkingThemeName, new { @class = "easyui-validatebox", style = "width:400px" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:center; padding-top:10px">
+                    <a href="javascript:void(0)" class="easyui-linkbutton" id="btnAddOKType" iconcls="icon-ok">提交</a>
+                    
+                </td>
+            </tr>
+        </table>
+        
+    }
+    </div>
+@section Scripts {
+<script type="text/javascript">
+    $("#btnAddOKType").click(function () {
+        var form = $("#form");
+        if (form.form("validate")) {
+            $.ajax({
+                debug: true,
+                url: "/Admin/SaveConfig",
+                type: "Post",
+                data: form.serialize(),
+                dataType: "json",
+                success: function (data) {
+                    if (data.Success) {
+                        $.messager.alert('提示', data.Message, "info", function () {
+                            window.location.href = "/Article/Admin/";
+                        });
+                    }
+                    else {
+                        $.messager.alert("提示", data.Message);
+                    }
+                }
+            });
+        }
+        return false;
+    });
+</script>
+    }
+
+
