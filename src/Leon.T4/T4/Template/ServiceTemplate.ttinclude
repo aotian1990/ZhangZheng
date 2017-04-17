@@ -1,0 +1,76 @@
+﻿<#+
+// <copyright file="NHibernateIServiceTemplate.tt" company="Goceen">
+//  Copyright © . All Rights Reserved.
+// </copyright>
+
+public class ServiceTemplate : CSharpTemplate
+{
+    private T4ModelInfo _model;
+
+    public ServiceTemplate(T4ModelInfo model)
+    {
+        _model = model;
+    }
+
+    public string FileName
+    {
+        get
+        {
+            return string.Format("{0}Service.cs",_model.Name);
+        }
+    }
+
+	public override string TransformText()
+	{
+		base.TransformText();
+#>
+using System;
+using System.Linq;
+using System.Text;
+using System.Linq.Dynamic;
+using System.Collections.Generic;
+using Leon.Core.Services;
+using Leon.Core.Repository;
+using Leon.Data;
+using Goceen.Website.Domain;
+
+namespace Goceen.Website.Services.Implements
+{
+    public class <#=_model.Name + "Service" #> : GenericServiceBase<<#=_model.Name #>> , I<#=_model.Name #>Service
+	{
+        public <#=_model.Name + "Service" #> (IRepository<<#=_model.Name #>> repository)
+        {
+            base.repository = repository;
+        }
+        
+
+        public void Delete(IList<int> idList)
+        {
+            foreach (var item in idList)
+            {
+                var entity = base.repository.Get(item);
+                if (entity == null)
+                {
+                    return;
+                }
+                base.repository.Delete(entity);
+            }
+        }
+         
+        public IList<<#=_model.Name #>> LoadAllByPage(out long total, int page, int rows, string order, string sort)
+        {
+            var list = base.repository.Query()
+                .OrderBy(sort + " " + order)
+                .Skip((page - 1) * rows).Take(rows);                
+            total = base.repository.Query().LongCount();            
+            return list.ToList();
+        }
+
+
+	}
+}
+<#+
+        return this.GenerationEnvironment.ToString();
+	}
+}
+#>

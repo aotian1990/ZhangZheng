@@ -1,0 +1,50 @@
+﻿<#+
+// <copyright file="NHibernateIServiceTemplate.tt" company="Goceen">
+//  Copyright © . All Rights Reserved.
+// </copyright>
+
+public class IServiceTemplate : CSharpTemplate
+{
+    private T4ModelInfo _model;
+
+    public IServiceTemplate(T4ModelInfo model)
+    {
+        _model = model;
+    }
+
+    public string FileName
+    {
+        get
+        {
+            return string.Format("I{0}Service.cs",_model.Name);
+        }
+    }
+
+	public override string TransformText()
+	{
+		base.TransformText();
+#>
+using System;
+using System.Linq;
+using System.Text;
+using System.Collections.Generic;
+using Leon.Core.Services;
+using Leon.Data;
+using Goceen.Website.Domain;
+
+namespace Goceen.Website.Services
+{
+    public interface I<#=_model.Name + "Service" #> : IGenericService<<#=_model.Name #>>
+	{      
+
+        void Delete(IList<int> idList);
+         
+        IList<<#=_model.Name #>> LoadAllByPage(out long total, int page, int rows, string order, string sort);
+
+	}
+}
+<#+
+        return this.GenerationEnvironment.ToString();
+	}
+}
+#>

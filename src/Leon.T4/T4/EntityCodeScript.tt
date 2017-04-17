@@ -1,0 +1,33 @@
+﻿<#@ template language="C#" debug="True" #>
+<#@ output extension="cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ Import Namespace="System.Linq" #>
+<#@ Import Namespace="System.Text" #>
+<#@ import namespace="System.Reflection" #>
+<#@ Import Namespace="System.Collections.Generic" #>
+<#@ Import Namespace="Leon.Core" #>
+<#@ Import Namespace="Leon.Core.T4" #>
+<#@ include file="T4Toolbox.tt" #>
+<#@ include file="EntityMappingTemplate.tt" #>
+<#
+    string currentPath = Path.GetDirectoryName(Host.TemplateFile);
+    string projectPath =currentPath.Substring(0, currentPath.IndexOf(@"\T4"));
+    string solutionPath = currentPath.Substring(0, currentPath.IndexOf(@"\Leon.Data"));
+
+    string modelFile= Path.Combine(solutionPath, @"Leon.Data\bin\Debug\Leon.Core.dll");
+    byte[] fileData= File.ReadAllBytes(modelFile);
+    Assembly assembly = Assembly.Load(fileData);
+    IEnumerable<Type> modelTypes = assembly.GetTypes().Where(m => typeof(EntityBase).IsAssignableFrom(m) && !m.IsAbstract);
+    foreach(Type modelType in modelTypes)
+    {	
+        T4EntityInfo entity = new T4EntityInfo(modelType);
+
+        //实体映射类
+        IEntityServicesTemplate mapping = new IEntityServicesTemplate(entity);
+        mapping.Output.Encoding = Encoding.UTF8;
+        mapping.RenderToFile(Path.Combine(path, mapping.FileName));
+
+    }
+#>
